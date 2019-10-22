@@ -1,11 +1,12 @@
 import React from 'react';
+import classes from './person.css';
 
 const Person  = () => {
 
     return (
         <div>
             <input type='text'/>
-            <p>My Name is:</p>
+            <p className={classes.lableName}>My Name is:</p>
         </div>
         
         

@@ -1,4 +1,12 @@
 .App {
   text-align: center;
+  padding: 10px;
+  margin: 20px;
+}
+.fstyle{
+  font-family: verdana;
+}
+.fbold{
+  font-weight: bold;
 }
 
