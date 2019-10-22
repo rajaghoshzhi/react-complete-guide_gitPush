@@ -8,6 +8,7 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <Person></Person>
+        <p></p>
       </div>
     );
   }
