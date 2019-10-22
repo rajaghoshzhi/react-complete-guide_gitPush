@@ -12,6 +12,7 @@ class App extends Component {
         <Person></Person>
         <Person></Person>
         <Person></Person>
+        <p></p>
       </div>
     );
   }
