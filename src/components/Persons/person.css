@@ -2,3 +2,11 @@
     font-family: verdana;
     font-weight: bold;
 }
+.decorateBox {
+    padding: 20px;
+    border: 1px solid black;
+    width: 20%;
+    margin: auto;
+    margin: 10px auto;
+    box-shadow: 1px 3px lightgrey;
+}
