@@ -14,20 +14,35 @@ class App extends Component {
     ],
     showPerson: false
   }
+
+  clickEventHandler = (event) => {
+    var togglePerson = false;
+    if(this.state.showPerson === false){
+      togglePerson = true;
+    }else{
+      togglePerson = false;
+    }
+    this.setState({
+      showPerson:togglePerson
+    })
+  }
   render() {
       let enableChild = '';
-      
-      const personArr =  this.state.person.map((obj)=>{
+
+      let personArr =  this.state.person.map((obj)=>{
        if(obj.name === 'Anupamma'){
         enableChild = 'I love to travel the world.';
        }
-        return <Person name={obj.name} age={obj.age}>{enableChild}</Person>   
+        return <Person key={obj.key} name={obj.name} age={obj.age}>{enableChild}</Person>   
       })
 
+      if(this.state.showPerson === false){
+        personArr = null;
+      }
     return (
       <div className={classes.App}>
         <div className={[classes.fstyle,classes.fbold].join(' ')}>Initializing React...</div>
-        <button className={classes.button_dsgn}>Toggle Selection</button>
+        <button className={classes.button_dsgn} onClick={this.clickEventHandler.bind(this)} value={this.state.showPerson}>Toggle Selection</button>
         {personArr}
       </div>
     );
