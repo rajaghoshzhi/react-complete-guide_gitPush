@@ -26,14 +26,24 @@ class App extends Component {
       showPerson:togglePerson
     })
   }
+  changeEventHandler = (keyEle,event) =>{
+    const personIndex = this.state.person.findIndex((el)=>{
+      return el.key == keyEle;
+    })
+    let cpyPersonArr = [...this.state.person];
+    cpyPersonArr[personIndex].name = event.target.value;
+    this.setState({
+      person:cpyPersonArr
+    })
+
+  }
   render() {
       let enableChild = '';
-
       let personArr =  this.state.person.map((obj)=>{
        if(obj.name === 'Anupamma'){
         enableChild = 'I love to travel the world.';
        }
-        return <Person key={obj.key} name={obj.name} age={obj.age}>{enableChild}</Person>   
+        return <Person key={obj.key} name={obj.name} age={obj.age} changed={this.changeEventHandler.bind(this,obj.key)}>{enableChild}</Person>   
       })
 
       if(this.state.showPerson === false){
