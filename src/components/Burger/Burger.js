@@ -15,10 +15,16 @@ const Burger = (props) => {
             arr.push(<BurgerIngredient key={index+'-'+i} type={e.name}></BurgerIngredient>);
         }
         
-        console.log(arr);
          return arr;
-    })
-    console.log(updateRenderPattern)
+    }) 
+    let transformIngredientsSizeCount = updateRenderPattern.reduce((accumulator,currentValue)=>{
+        // console.log(currentValue.length)
+        return accumulator += currentValue.length;
+    },0)
+    
+    if(transformIngredientsSizeCount ===0 ){
+        updateRenderPattern = <p>Please start adding ingredients !</p>
+    }
     return (
         <div className={Classes.Burger}> 
             <BurgerIngredient type='bread-top'></BurgerIngredient>
