@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from '../../hoc/Auxillary';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
 
 const addOnPrice = {
         salad: 10,
@@ -53,13 +54,18 @@ class BurgerBuilder extends Component {
     }
     render() {
         const disabledBtn = {...this.state.ingredients};
+        const cpyForUpdate = {...this.state.ingredients};
         return (
-            <Aux>  
+            <Aux> 
+                <Modal></Modal>
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
-                passDisabled={disabledBtn}
-                clickToAdd={this.addIngredientHandler.bind(this)}
-                clickToRemove={this.removeIngredientHandler.bind(this)}></BuildControls>
+                    passDisabled={disabledBtn}
+                    clickToAdd={this.addIngredientHandler.bind(this)}
+                    clickToRemove={this.removeIngredientHandler.bind(this)}
+                    currentPrice={this.state.totalPrice}
+                    sendIngredients={cpyForUpdate}>
+                </BuildControls>
             </Aux>
         )
     }

@@ -10,7 +10,6 @@ const Controls = [
 ]
 
 const BuildControls = (props) =>{
-//  console.log(props.passDisabled['salad']);
   const renderControls =   Controls.map((ele)=>{
         return <BuildControl 
         addEle={props.clickToAdd.bind(this,ele.type)} 
@@ -19,9 +18,23 @@ const BuildControls = (props) =>{
         label={ele.label}
         disableBtn={props.passDisabled[ele.type]}></BuildControl>
     });
+
+    
+    const sumOfIngredients = Object.keys(props.sendIngredients).map((el)=>{
+        return props.sendIngredients[el]
+    }).reduce((accumulator,looper)=>{
+
+        return accumulator += looper;
+    },0);
+    let disableOrderNow = false;
+    if(sumOfIngredients > 0 ){
+        disableOrderNow = true;
+    }
     return (
         <div className={Classes.BuildControls}>
-            {renderControls}
+            <p className={Classes.Bold}>Current Price: {props.currentPrice}</p>
+            {renderControls}             
+            <button className={Classes.OrderButton} disabled={!disableOrderNow}>ORDER NOW</button>   
         </div>
     )
 }
