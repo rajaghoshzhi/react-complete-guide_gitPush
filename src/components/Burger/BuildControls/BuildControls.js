@@ -12,7 +12,11 @@ const Controls = [
 const BuildControls = (props) =>{
 
   const renderControls =   Controls.map((ele)=>{
-        return <BuildControl addEle={props.clickToAdd.bind(this,ele.type)} key={ele.label} label={ele.label}></BuildControl>
+        return <BuildControl 
+        addEle={props.clickToAdd.bind(this,ele.type)} 
+        removeEle={props.clickToRemove.bind(this,ele.type)} 
+        key={ele.label}
+        label={ele.label}></BuildControl>
     });
     return (
         <div className={Classes.BuildControls}>
