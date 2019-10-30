@@ -10,13 +10,14 @@ const Controls = [
 ]
 
 const BuildControls = (props) =>{
-
+//  console.log(props.passDisabled['salad']);
   const renderControls =   Controls.map((ele)=>{
         return <BuildControl 
         addEle={props.clickToAdd.bind(this,ele.type)} 
         removeEle={props.clickToRemove.bind(this,ele.type)} 
         key={ele.label}
-        label={ele.label}></BuildControl>
+        label={ele.label}
+        disableBtn={props.passDisabled[ele.type]}></BuildControl>
     });
     return (
         <div className={Classes.BuildControls}>

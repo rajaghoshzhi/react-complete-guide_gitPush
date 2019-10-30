@@ -52,10 +52,12 @@ class BurgerBuilder extends Component {
         console.log(this.state);
     }
     render() {
+        const disabledBtn = {...this.state.ingredients};
         return (
             <Aux>  
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
+                passDisabled={disabledBtn}
                 clickToAdd={this.addIngredientHandler.bind(this)}
                 clickToRemove={this.removeIngredientHandler.bind(this)}></BuildControls>
             </Aux>
