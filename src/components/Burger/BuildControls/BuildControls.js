@@ -34,7 +34,7 @@ const BuildControls = (props) =>{
         <div className={Classes.BuildControls}>
             <p className={Classes.Bold}>Current Price: {props.currentPrice}</p>
             {renderControls}             
-            <button className={Classes.OrderButton} disabled={!disableOrderNow}>ORDER NOW</button>   
+            <button className={Classes.OrderButton} disabled={!disableOrderNow} onClick={props.showOrder}>ORDER NOW</button>   
         </div>
     )
 }

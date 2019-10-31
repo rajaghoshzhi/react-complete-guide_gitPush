@@ -3,6 +3,7 @@ import Aux from '../../hoc/Auxillary';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/OrderSummary/OrderSummary';
 
 const addOnPrice = {
         salad: 10,
@@ -20,7 +21,8 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat:0  
         },
-        totalPrice: 100
+        totalPrice: 100,
+        purchasable: false
     }
 
     addIngredientHandler = (type) =>{
@@ -34,7 +36,6 @@ class BurgerBuilder extends Component {
             ingredients:newIngredientList,
             totalPrice:updatedTotalPrice
         });
-        console.log(this.state);
     }
     removeIngredientHandler = (type) => {
         const oldCount = this.state.ingredients[type];
@@ -50,21 +51,35 @@ class BurgerBuilder extends Component {
             ingredients:newIngredientList,
             totalPrice:updatedTotalPrice
         });
-        console.log(this.state);
+    }
+    showOrderButtonHandler = () => {
+        this.setState({
+            purchasable: true
+        })
     }
     render() {
         const disabledBtn = {...this.state.ingredients};
         const cpyForUpdate = {...this.state.ingredients};
+        let ModalRender = null;
+        if(this.state.purchasable === true){
+            ModalRender =  <Modal>
+            <OrderSummary
+            sendIngredients={cpyForUpdate}>                        
+            </OrderSummary>
+        </Modal>
+        }
+
         return (
             <Aux> 
-                <Modal></Modal>
+                {ModalRender}
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
                     passDisabled={disabledBtn}
                     clickToAdd={this.addIngredientHandler.bind(this)}
                     clickToRemove={this.removeIngredientHandler.bind(this)}
                     currentPrice={this.state.totalPrice}
-                    sendIngredients={cpyForUpdate}>
+                    sendIngredients={cpyForUpdate}
+                    showOrder = {this.showOrderButtonHandler.bind(this)}>
                 </BuildControls>
             </Aux>
         )
