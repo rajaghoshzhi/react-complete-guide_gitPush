@@ -53,16 +53,24 @@ class BurgerBuilder extends Component {
         });
     }
     showOrderButtonHandler = () => {
+        
+        let showHideBackdrop = this.state.purchasable===false ? true : false;
         this.setState({
-            purchasable: true
+            purchasable: showHideBackdrop
         })
     }
+    calledBackDrop = () => {
+        console.log("I  am called ");
+    }
+
     render() {
         const disabledBtn = {...this.state.ingredients};
         const cpyForUpdate = {...this.state.ingredients};
         let ModalRender = null;
         if(this.state.purchasable === true){
-            ModalRender =  <Modal>
+            ModalRender =  <Modal 
+            sendBackdrop={this.state.purchasable}
+            removeBackDrop = {this.showOrderButtonHandler.bind(this)}>
             <OrderSummary
             sendIngredients={cpyForUpdate}>                        
             </OrderSummary>
