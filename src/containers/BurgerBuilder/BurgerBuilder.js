@@ -72,7 +72,10 @@ class BurgerBuilder extends Component {
             sendBackdrop={this.state.purchasable}
             removeBackDrop = {this.showOrderButtonHandler.bind(this)}>
             <OrderSummary
-            sendIngredients={cpyForUpdate}>                        
+            sendIngredients={cpyForUpdate}
+            currentPrice={this.state.totalPrice}
+            cancelBtn={this.showOrderButtonHandler.bind(this)}
+            >                        
             </OrderSummary>
         </Modal>
         }

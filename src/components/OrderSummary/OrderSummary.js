@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/Auxillary';
+import Button from '../UI/Button/Button';
 
 const OrderSummary = (props) => {
     const ObjPair = Object.keys(props.sendIngredients).map((el)=>{
@@ -18,6 +19,9 @@ const OrderSummary = (props) => {
             <ul>
                 {ObjPair}
             </ul>
+            <p><strong>Total Price: {props.currentPrice}</strong></p>
+            <Button btnType='Danger' eventHandler={props.cancelBtn}>Cancel</Button>
+            <Button btnType='Success' eventHandler={props.cancelBtn}>Countinue</Button>
         </Aux>
     )
 }
