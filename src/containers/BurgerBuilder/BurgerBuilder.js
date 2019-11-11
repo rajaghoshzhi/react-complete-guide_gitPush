@@ -4,6 +4,9 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
+import axios from 'axios';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import errorMessageHandler from '../../hoc/errorMessageHandler';
 
 const addOnPrice = {
         salad: 10,
@@ -22,7 +25,9 @@ class BurgerBuilder extends Component {
             meat:0  
         },
         totalPrice: 100,
-        purchasable: false
+        purchasable: false,
+        loading:false,
+        userMessage: null
     }
 
     addIngredientHandler = (type) =>{
@@ -59,30 +64,71 @@ class BurgerBuilder extends Component {
             purchasable: showHideBackdrop
         })
     }
+    continueOrderButtonHandler = () => {
+        this.setState({ loading: true});
+        const orderObj = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'raja ghosh',
+                address:{
+                    street: 'teststreet',
+                    zipcode:'825409',
+                    country: 'india'
+                },
+                email: 'rajaghosh@gmail.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        axios.post('/orders.json',orderObj)
+        .then(response => {
+            this.setState({ loading: false ,userMessage: 'Data Sasved Successfully' });
+            // this.showOrderButtonHandler();
+            console.log(response);
+        })
+        .catch(error =>{
+            this.setState({ loading: false,userMessage: error.message });
+            // this.showOrderButtonHandler();
+            // console.log(error);
+        })
+    }
     calledBackDrop = () => {
         console.log("I  am called ");
     }
-
+   
     render() {
         const disabledBtn = {...this.state.ingredients};
         const cpyForUpdate = {...this.state.ingredients};
         let ModalRender = null;
-        if(this.state.purchasable === true){
+        let orderSummary = <OrderSummary
+        sendIngredients={cpyForUpdate}
+        currentPrice={this.state.totalPrice}
+        cancelBtn={this.showOrderButtonHandler.bind(this)}
+        continueBtn = {this.continueOrderButtonHandler.bind(this)}
+        message= {this.state.userMessage}
+        >                        
+        </OrderSummary>;
+        if(this.state.loading){
+            orderSummary = <Spinner />;
+        }
+        
+        if(this.state.purchasable === true){           
             ModalRender =  <Modal 
             sendBackdrop={this.state.purchasable}
             removeBackDrop = {this.showOrderButtonHandler.bind(this)}>
-            <OrderSummary
-            sendIngredients={cpyForUpdate}
-            currentPrice={this.state.totalPrice}
-            cancelBtn={this.showOrderButtonHandler.bind(this)}
-            >                        
-            </OrderSummary>
+
+            {orderSummary} 
+            
+
         </Modal>
         }
+
+     
 
         return (
             <Aux> 
                 {ModalRender}
+                {/* <errorMessageHandler></errorMessageHandler> */}
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
                     passDisabled={disabledBtn}
