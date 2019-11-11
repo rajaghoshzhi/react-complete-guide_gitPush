@@ -6,7 +6,10 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
 import axios from 'axios';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import errorMessageHandler from '../../hoc/errorMessageHandler';
+
+
+
+// import errorMessageHandler from '../../hoc/errorMessageHandler';
 
 const addOnPrice = {
         salad: 10,
@@ -27,7 +30,10 @@ class BurgerBuilder extends Component {
         totalPrice: 100,
         purchasable: false,
         loading:false,
-        userMessage: null
+        userMessage: {
+            status: null,
+            message: null
+        }
     }
 
     addIngredientHandler = (type) =>{
@@ -82,12 +88,27 @@ class BurgerBuilder extends Component {
         }
         axios.post('/orders.json',orderObj)
         .then(response => {
-            this.setState({ loading: false ,userMessage: 'Data Sasved Successfully' });
+            this.setState({ 
+                loading: false ,
+                userMessage:{
+                    status: 'success',
+                    message: 'Data Saved Successfully'
+                    
+                }
+            });
             // this.showOrderButtonHandler();
             console.log(response);
         })
         .catch(error =>{
-            this.setState({ loading: false,userMessage: error.message });
+            // console.log(error.code);
+            this.setState({ 
+                loading: false ,
+                userMessage:{
+                    status: 'error',
+                    message: error.message
+                    
+                }
+            });
             // this.showOrderButtonHandler();
             // console.log(error);
         })
@@ -105,7 +126,7 @@ class BurgerBuilder extends Component {
         currentPrice={this.state.totalPrice}
         cancelBtn={this.showOrderButtonHandler.bind(this)}
         continueBtn = {this.continueOrderButtonHandler.bind(this)}
-        message= {this.state.userMessage}
+        usermsg= {this.state.userMessage}
         >                        
         </OrderSummary>;
         if(this.state.loading){
@@ -126,7 +147,8 @@ class BurgerBuilder extends Component {
      
 
         return (
-            <Aux> 
+
+            <Aux>        
                 {ModalRender}
                 {/* <errorMessageHandler></errorMessageHandler> */}
                 <Burger ingredients={this.state.ingredients}></Burger>

@@ -1,10 +1,16 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import axios from 'axios';
-import errorMessageHandler from '../src/hoc/errorMessageHandler';
+// very important if you are using cssModule & reactstrap
+import { Util } from 'reactstrap';
+import bootstrap from 'bootstrap/dist/css/bootstrap.css';
+Util.setGlobalCssModule(bootstrap);
+
+
 
 
 axios.defaults.baseURL = 'https://react-my-burger-7f2ad.firebaseio.com/';
