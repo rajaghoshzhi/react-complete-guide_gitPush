@@ -1,9 +1,10 @@
 import React from 'react';
 import Classes from './Burger.css';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredent';
+import { withRouter } from 'react-router-dom';
 
 const Burger = (props) => {
-
+    console.log(props);
     // console.log(props.ingredients);
     // Object.entries return like ['salad',1],['meat',2]; transformIngredients return array of objects
     const transformIngredients = Object.entries(props.ingredients).map((e) => ( { 'name':e[0], 'value':e[1]} ));

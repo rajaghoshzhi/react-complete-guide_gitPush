@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
 import axios from 'axios';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import Checkout from '../Checkout/Checkout';
 
 
 
@@ -21,12 +22,8 @@ const addOnPrice = {
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients:{
-            salad: 0,
-            bacon:0,
-            cheese: 0,
-            meat:0  
-        },
+        //ingredients:{bacon: 0, cheese: 0, meat: 0, salad: 0},
+        ingredients:'',
         totalPrice: 100,
         purchasable: false,
         loading:false,
@@ -35,7 +32,11 @@ class BurgerBuilder extends Component {
             message: null
         }
     }
-
+    componentWillMount(){
+        axios.get('/ingredients.json').then(response => {
+            this.setState({ingredients: response.data});
+        })
+    }
     addIngredientHandler = (type) =>{
         const oldCount = this.state.ingredients[type];
         const newCount = oldCount + 1;
@@ -70,48 +71,56 @@ class BurgerBuilder extends Component {
             purchasable: showHideBackdrop
         })
     }
-    continueOrderButtonHandler = () => {
-        this.setState({ loading: true});
-        const orderObj = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'raja ghosh',
-                address:{
-                    street: 'teststreet',
-                    zipcode:'825409',
-                    country: 'india'
-                },
-                email: 'rajaghosh@gmail.com'
-            },
-            deliveryMethod: 'fastest'
-        }
-        axios.post('/orders.json',orderObj)
-        .then(response => {
-            this.setState({ 
-                loading: false ,
-                userMessage:{
-                    status: 'success',
-                    message: 'Data Saved Successfully'
+    continueOrderButtonHandler = () => {  
+        var queryParams = []
+         for(let ele in this.state.ingredients){
+            let val = ele+'='+this.state.ingredients[ele];
+            queryParams.push(val);
+         }
+         const finalQueryParams = queryParams.join('&');
+         console.log(finalQueryParams);
+            this.props.history.push({
+                pathname:'/checkout',
+                search:'?'+finalQueryParams
+            })
+            
+        // const orderObj = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'raja ghosh',
+        //         address:{
+        //             street: 'teststreet',
+        //             zipcode:'825409',
+        //             country: 'india'
+        //         },
+        //         email: 'rajaghosh@gmail.com'
+        //     },
+        //     deliveryMethod: 'fastest'
+        // }
+        // axios.post('/orders.json',orderObj)
+        // .then(response => {
+        //     this.setState({ 
+        //         loading: false ,
+        //         userMessage:{
+        //             status: 'success',
+        //             message: 'Data Saved Successfully'
                     
-                }
-            });
-            // this.showOrderButtonHandler();
-            console.log(response);
-        })
-        .catch(error =>{
-            // console.log(error.code);
-            this.setState({ 
-                loading: false ,
-                userMessage:{
-                    status: 'error',
-                    message: error.message
+        //         }
+        //     });
+        //     console.log(response);
+        // })
+        // .catch(error =>{
+        //     // console.log(error.code);
+        //     this.setState({ 
+        //         loading: false ,
+        //         userMessage:{
+        //             status: 'error',
+        //             message: error.message
                     
-                }
-            });
-            // this.showOrderButtonHandler();
-            // console.log(error);
-        })
+        //         }
+        //     });
+        // })
     }
     calledBackDrop = () => {
         console.log("I  am called ");
@@ -160,6 +169,7 @@ class BurgerBuilder extends Component {
                     sendIngredients={cpyForUpdate}
                     showOrder = {this.showOrderButtonHandler.bind(this)}>
                 </BuildControls>
+                {/* <Checkout></Checkout> */}
             </Aux>
         )
     }
