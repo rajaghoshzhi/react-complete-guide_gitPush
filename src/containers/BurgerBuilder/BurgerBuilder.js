@@ -6,7 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
 import axios from 'axios';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import Checkout from '../Checkout/Checkout';
+// import Checkout from '../Checkout/Checkout';
 
 
 
@@ -72,55 +72,23 @@ class BurgerBuilder extends Component {
         })
     }
     continueOrderButtonHandler = () => {  
+        console.log('from continue button burger builder js');
+        console.log(this.state);
+
         var queryParams = []
          for(let ele in this.state.ingredients){
             let val = ele+'='+this.state.ingredients[ele];
             queryParams.push(val);
          }
+         queryParams.push('totalPrice='+this.state.totalPrice);
          const finalQueryParams = queryParams.join('&');
-         console.log(finalQueryParams);
+            // console.log(finalQueryParams);
             this.props.history.push({
                 pathname:'/checkout',
                 search:'?'+finalQueryParams
             })
             
-        // const orderObj = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         name: 'raja ghosh',
-        //         address:{
-        //             street: 'teststreet',
-        //             zipcode:'825409',
-        //             country: 'india'
-        //         },
-        //         email: 'rajaghosh@gmail.com'
-        //     },
-        //     deliveryMethod: 'fastest'
-        // }
-        // axios.post('/orders.json',orderObj)
-        // .then(response => {
-        //     this.setState({ 
-        //         loading: false ,
-        //         userMessage:{
-        //             status: 'success',
-        //             message: 'Data Saved Successfully'
-                    
-        //         }
-        //     });
-        //     console.log(response);
-        // })
-        // .catch(error =>{
-        //     // console.log(error.code);
-        //     this.setState({ 
-        //         loading: false ,
-        //         userMessage:{
-        //             status: 'error',
-        //             message: error.message
-                    
-        //         }
-        //     });
-        // })
+        
     }
     calledBackDrop = () => {
         console.log("I  am called ");
