@@ -4,34 +4,34 @@ import axios from 'axios';
 
 class Orders extends Component{
     state = {
-        ingredents:null,
-        price:null,
-        id:null
+        orders:[],
     }
     componentDidMount(){
         var newData = [];
         axios.get('/orders.json').then((response)=>{
-            console.log(response);
             newData = response.data;
-            console.log(newData);
-            // this.setState({
-            //     ingredents: response.data.ingredents,
-            //     price: response.data.price,
-            //     id:
-            // })
-            for (let [key, value] of Object.entries(newData)) {
-                console.log(value.ingredients);
-              }
-            // response.data.map((res)=>{
-            //     console.log(res);
-            // })
+            let setParams =[];
+            for(let [key,params] of Object.entries(newData)){       
+                
+                params['id'] = key;
+                setParams.push(params);
+            }
+             this.setState({
+                 orders:setParams
+             })
         })
     }
     render(){
+        let  orderList = [];
+        if(this.state.orders.length > 0 ){
+                orderList = this.state.orders.map((res)=>{
+                return  <Order key={res.id} ingredients={res.ingredients} price={res.price} />
+            })
+        }
+        // console.log(this.state);
         return (
             <div>
-                <Order />
-                <Order />
+                {orderList}
             </div>
         )         
     }

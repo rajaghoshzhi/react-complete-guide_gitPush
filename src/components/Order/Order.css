@@ -13,4 +13,5 @@
     /* border: 1px solid grey; */
     box-sizing: border-box;
     box-shadow: 2px 2px 2px 2px #eee;
+    text-transform: capitalize;
 }
