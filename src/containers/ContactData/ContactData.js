@@ -15,6 +15,11 @@ class ContactData extends Component {
                     placeholder:'your Name'
                 },
                 value:'',
+                valid:false,
+                validation:{
+                    minLength: 4,
+                    required:true
+                }
             },
             email:{
                 element:'input',
@@ -23,6 +28,13 @@ class ContactData extends Component {
                     placeholder:'your Email'
                 },
                 value:'',
+                valid:false,
+                validation:{
+                    required:true,
+                    validation_name:'email',
+                    // pattern:'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+                    pattern:'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+                }
             },
             street:{
                 element:'input',
@@ -31,6 +43,10 @@ class ContactData extends Component {
                     placeholder:'street'
                 },
                 value:'',
+                valid:false,
+                validation:{
+                    required:true
+                }
             },
             zipcode:{
                 element:'input',
@@ -39,6 +55,13 @@ class ContactData extends Component {
                     placeholder:'postal code'
                 },
                 value:'',
+                valid:false,
+                validation:{
+                    required:true,
+                    postalLength:6,
+                    validation_name:'zipcode',
+                    pattern: '^(0|[1-9][0-9]*)$'
+                }
             }
 
         },
@@ -78,15 +101,48 @@ class ContactData extends Component {
             });
         })
     }
+    checkvalidity =(eleObj,rules) => {
+        //eleObj hold whole object
+        // rules holds on the parameter  
+        debugger
+        let isValid = false;
+        if(rules.required){
+            if(eleObj.value.length > rules.minLength){
+                isValid = true;
+            }           
+            if(rules.pattern){          
+                var reg = new RegExp(rules.pattern);
+                var patternMatch = reg.test(eleObj.value);       
+                if(patternMatch){
+                    if(rules.validation_name === 'zipcode'){
+                        if(eleObj.value.length === rules.postalLength){ 
+                            isValid = true;
+                        }
+                    }
+                    if(rules.validation_name === 'email'){
+                        isValid = true;
+                    }
+                   
+                }
+            }
+        }
+        console.log(eleObj);
+        console.log(rules);
+        return isValid;
+    }
     inputChangeHandler = (event,key) =>{
         const updateForm = {...this.state.orderform};
         let updateFormElement = {...updateForm[key]};
         updateFormElement.value = event.target.value;
         updateForm[key] = updateFormElement;
+        let isValid = this.checkvalidity(updateFormElement,updateForm[key]['validation']);
+         console.log(isValid);
+        updateFormElement.valid = isValid;
+        updateForm[key] = updateFormElement;
         this.setState({
             orderform:updateForm
         })
-        console.log(this.state);
+        // console.log(this.state);
     } 
     render(){        
         let createInputEle = {...this.state.orderform};
