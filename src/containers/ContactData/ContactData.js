@@ -18,8 +18,10 @@ class ContactData extends Component {
                 valid:false,
                 validation:{
                     minLength: 4,
+                    validation_name:'name',  
                     required:true
-                }
+                },
+                errorMsg:''
             },
             email:{
                 element:'input',
@@ -31,10 +33,10 @@ class ContactData extends Component {
                 valid:false,
                 validation:{
                     required:true,
-                    validation_name:'email',
-                    // pattern:'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
-                    pattern:'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
-                }
+                    validation_name:'email',  
+                    pattern:"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+                },
+                errorMsg:''
             },
             street:{
                 element:'input',
@@ -45,8 +47,10 @@ class ContactData extends Component {
                 value:'',
                 valid:false,
                 validation:{
-                    required:true
-                }
+                    required:true,
+                    validation_name:'street'
+                },
+                errorMsg:''
             },
             zipcode:{
                 element:'input',
@@ -61,7 +65,8 @@ class ContactData extends Component {
                     postalLength:6,
                     validation_name:'zipcode',
                     pattern: '^(0|[1-9][0-9]*)$'
-                }
+                },
+                errorMsg:''
             }
 
         },
@@ -102,14 +107,25 @@ class ContactData extends Component {
         })
     }
     checkvalidity =(eleObj,rules) => {
-        //eleObj hold whole object
-        // rules holds on the parameter  
-        debugger
+        let returnObj = {}
         let isValid = false;
+        let error = '';
         if(rules.required){
-            if(eleObj.value.length > rules.minLength){
-                isValid = true;
-            }           
+            if(rules.validation_name === 'name'){
+                if(eleObj.value.trim().length >= rules.minLength){
+                    isValid = true;
+                } else{
+                    error = 'Name should be >= 4 letters';
+                } 
+            }
+              
+            if(rules.validation_name === 'street'){
+                if(eleObj.value.trim().length > 1){
+                    isValid = true;
+                } else {
+                    error = 'Street is required';
+                }                 
+            }      
             if(rules.pattern){          
                 var reg = new RegExp(rules.pattern);
                 var patternMatch = reg.test(eleObj.value);       
@@ -117,18 +133,29 @@ class ContactData extends Component {
                     if(rules.validation_name === 'zipcode'){
                         if(eleObj.value.length === rules.postalLength){ 
                             isValid = true;
+                        }else{
+                            error = 'Zipcode is required';
                         }
                     }
                     if(rules.validation_name === 'email'){
                         isValid = true;
                     }
                    
+                }else{
+                    if(rules.validation_name === 'zipcode'){
+                        error = 'Zipcode is not valid';
+                    }
+                    if(rules.validation_name === 'email'){
+                        error = 'Email is not valid';
+                    }
                 }
             }
         }
-        console.log(eleObj);
-        console.log(rules);
-        return isValid;
+        // console.log(eleObj);
+        // console.log(rules);
+        returnObj.status = isValid;
+        returnObj.error = error;
+        return returnObj;
     }
     inputChangeHandler = (event,key) =>{
         const updateForm = {...this.state.orderform};
@@ -136,8 +163,9 @@ class ContactData extends Component {
         updateFormElement.value = event.target.value;
         updateForm[key] = updateFormElement;
         let isValid = this.checkvalidity(updateFormElement,updateForm[key]['validation']);
-         console.log(isValid);
-        updateFormElement.valid = isValid;
+        //  console.log(isValid);
+        updateFormElement.valid = isValid.status;
+        updateFormElement.errorMsg = isValid.error;
         updateForm[key] = updateFormElement;
         this.setState({
             orderform:updateForm
@@ -145,6 +173,7 @@ class ContactData extends Component {
         // console.log(this.state);
     } 
     render(){        
+        console.log(this.state)
         let createInputEle = {...this.state.orderform};
         let InputCreationArr = [];
         for(let key in createInputEle){
@@ -155,6 +184,7 @@ class ContactData extends Component {
                 type={createInputEle[key].elementConfig.elementType}  
                 name={key}
                 placeholder={createInputEle[key].elementConfig.placeholder} 
+                errormsg = {this.state.orderform[key].errorMsg} 
                 onChange={(event) =>this.inputChangeHandler(event,key)}/>)
         }
         // console.log(InputCreationArr);

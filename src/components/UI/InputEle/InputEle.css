@@ -23,3 +23,10 @@
     background-color:#ccc;
     
 }
+.ErrorMessage {
+    float: left;
+    padding-left: 10px;
+    color: #c96161;
+    font-size: 12px;
+    font-weight: bold;
+}

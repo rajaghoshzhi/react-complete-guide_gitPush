@@ -19,7 +19,9 @@ const InputEle =(props) => {
         <div className={classes.InputEle}>
             <label className={classes.Label}>{props.label}</label>
             {inputElement}
+            <div className={classes.ErrorMessage}>{props.errormsg}</div>
         </div>
+         
     )
 }
 export default InputEle;
