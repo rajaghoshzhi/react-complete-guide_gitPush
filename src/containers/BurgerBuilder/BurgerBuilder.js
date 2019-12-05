@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import  { connect } from 'react-redux';
 import Aux from '../../hoc/Auxillary';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -23,8 +24,8 @@ class BurgerBuilder extends Component {
 
     state = {
         //ingredients:{bacon: 0, cheese: 0, meat: 0, salad: 0},
-        ingredients:'',
-        totalPrice: 100,
+        // ingredients:'',
+        // totalPrice: 100,
         purchasable: false,
         loading:false,
         userMessage: {
@@ -34,7 +35,9 @@ class BurgerBuilder extends Component {
     }
     componentWillMount(){
         axios.get('/ingredients.json').then(response => {
-            this.setState({ingredients: response.data});
+            // this.setState({ingredients: response.data});
+            this.props.ing.ingredients = response.data;
+            console.log(this.props);
         })
     }
     addIngredientHandler = (type) =>{
@@ -128,10 +131,11 @@ class BurgerBuilder extends Component {
             <Aux>        
                 {ModalRender}
                 {/* <errorMessageHandler></errorMessageHandler> */}
-                <Burger ingredients={this.state.ingredients}></Burger>
+                <Burger ingredients={this.props.ing.ingredients}></Burger>
                 <BuildControls 
                     passDisabled={disabledBtn}
                     clickToAdd={this.addIngredientHandler.bind(this)}
+                    // clickToAdd={() => this.addIngredientHandler(type)}
                     clickToRemove={this.removeIngredientHandler.bind(this)}
                     currentPrice={this.state.totalPrice}
                     sendIngredients={cpyForUpdate}
@@ -142,5 +146,15 @@ class BurgerBuilder extends Component {
         )
     }
 }
-
-export default BurgerBuilder;
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        ing: state.ingredients
+    }
+}
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        // addIngredientHandler: (ingType) => dispatch({type:'ADD_INGREDIENTS',ingType:ingType})
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(BurgerBuilder);
