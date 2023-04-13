@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <div> hello Raja Ghosh</div>
+        <div>hello Raja Ghosh <div> welcome !</div></div>
         <Layout>
           {/* <BurgerBuilder></BurgerBuilder> */}
           <Switch>           
